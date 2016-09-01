@@ -1,7 +1,9 @@
 // ==UserScript==
 // @name         GitHub Utils
 // @description  Something will go here...
-// @version      0.0.1
+// @version      0.0.2
+// @updateURL    https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
+// @downloadURL  https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @author       @dracco1993
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js
 // @match        http://*.github.com/*/pulls
