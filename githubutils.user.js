@@ -19,16 +19,16 @@ var username;
 (function() {
     'use strict';
 
-    console.log("Doing things...");
+    console.log('Doing things...');
     init();
 })();
 
 function init(){
     username = getUsername();
     console.log(username);
-    $(".Box-body-row").each(function(k,v){
+    $('.Box-body-row').each(function(k,v){
         //console.log(v);
-        var temp = $(v).find(".Box-row-link")[0];
+        var temp = $(v).find('.Box-row-link')[0];
 
         $.ajax({
             url: temp.href,
@@ -41,51 +41,51 @@ function init(){
 }
 
 function getUsername(){
-    return $(".dropdown-header .css-truncate-target").text();
+    return $('.dropdown-header .css-truncate-target').text();
 }
 
 function getComments(source){
     //console.log(source);
-    var content = source.find(".js-comment-container");
-    var prNumber = source.find(".gh-header-number").first().text().slice(1);
+    var content = source.find('.js-comment-container');
+    var prNumber = source.find('.gh-header-number').first().text().slice(1);
     var prDescription = content.slice(0,1);
     var newComment = content.slice(-1,1);
     var comments = content.slice(1, content.length-1);
-    var location = $("#issue_"+prNumber)[0];
+    var location = $('#issue_'+prNumber)[0];
 
-    setStyle(location, {"background-color": "#FFEC94"});
+    setStyle(location, {'background-color': '#FFEC94'});
 
     if(comments.length > 0){
         var lastComment = getLastComment(comments);
         var lastUserComment = getLastComment(comments, username);
-        var src = $(lastComment).find(".timeline-comment-avatar")[0].src;
+        var src = $(lastComment).find('.timeline-comment-avatar')[0].src;
         //addIcon(location, src, lastComment, prNumber);
 
-        if(typeof(lastUserComment) !== "undefined"){
-            setStyle(location, {"background-color": "#B0E57C"});
+        if(typeof(lastUserComment) !== 'undefined'){
+            setStyle(location, {'background-color': '#B0E57C'});
         }
     } else {
-        setStyle(location, {"background-color": "#FFAEAE"});
+        setStyle(location, {'background-color': '#FFAEAE'});
     }
 }
 
 function addIcon(location, source, content, prNumber){
-    var temp = $(location).find(".lh-condensed")[0];
-    var href = $(content).find("a[href^='#issuecomment']")[0];
+    var temp = $(location).find('.lh-condensed')[0];
+    var href = $(content).find('a[href^='#issuecomment']')[0];
     href = $(href).attr('href');
-    var url = window.location.href.replace(/(pulls.*)/g, "");
-    var link = $('<a>',{href: url+"pull/"+prNumber+href});
+    var url = window.location.href.replace(/(pulls.*)/g, '');
+    var link = $('<a>',{href: url+'pull/'+prNumber+href});
     var image = link.append($('<img>',{src: source, width: 44}));
     //console.log(url);
     $(temp).append(image);
 }
 
 function getLastComment(comments, tempuser){
-    if(typeof(tempuser) !== "undefined"){
+    if(typeof(tempuser) !== 'undefined'){
         // Username passed
         var lastComment;
         $.each(comments, function(i, comment){
-            if ($(comment).find("img")[0].alt.slice(1) == tempuser) {
+            if ($(comment).find('img')[0].alt.slice(1) == tempuser) {
                 lastComment = comment;
             }
         });
