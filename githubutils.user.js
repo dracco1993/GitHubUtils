@@ -18,8 +18,6 @@ var username;
 
 (function() {
     'use strict';
-
-    console.log('Doing things...');
     init();
 })();
 
@@ -58,7 +56,7 @@ function getComments(source){
     if(comments.length > 0){
         var lastComment = getLastComment(comments);
         var lastUserComment = getLastComment(comments, username);
-        var src = $(lastComment).find('.timeline-comment-avatar')[0].src;
+        //var src = $(lastComment).find('.timeline-comment-avatar')[0].src;
         //addIcon(location, src, lastComment, prNumber);
 
         if(typeof(lastUserComment) !== 'undefined'){
