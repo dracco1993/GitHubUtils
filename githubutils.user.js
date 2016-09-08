@@ -71,7 +71,7 @@ function getComments(source){
 
 function addIcon(location, source, content, prNumber){
     var temp = $(location).find('.lh-condensed')[0];
-    var href = $(content).find('a[href^='#issuecomment']')[0];
+    var href = $(content).find("a[href^='#issuecomment']")[0];
     href = $(href).attr('href');
     var url = window.location.href.replace(/(pulls.*)/g, '');
     var link = $('<a>',{href: url+'pull/'+prNumber+href});
