@@ -83,7 +83,7 @@ function getLastComment(comments, tempuser){
         // Username passed
         var lastComment;
         $.each(comments, function(i, comment){
-            if ($(comment).find('img')[0].alt.slice(1) == tempuser) {
+            if ($(comment).find('img')[0].alt.slice(1) === tempuser) {
                 lastComment = comment;
             }
         });
