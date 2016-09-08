@@ -27,7 +27,7 @@ function init(){
     username = getUsername();
     console.log(username);
     $(".Box-body-row").each(function(k,v){
-        console.log(v);
+        //console.log(v);
         var temp = $(v).find(".Box-row-link")[0];
 
         $.ajax({
@@ -41,7 +41,7 @@ function init(){
 }
 
 function getUsername(){
-    return $(".css-truncate-target").text();
+    return $(".dropdown-header .css-truncate-target").text();
 }
 
 function getComments(source){
@@ -51,14 +51,22 @@ function getComments(source){
     var prDescription = content.slice(0,1);
     var newComment = content.slice(-1,1);
     var comments = content.slice(1, content.length-1);
-    
+    var location = $("#issue_"+prNumber)[0];
+
+    setStyle(location, {"background-color": "#FFEC94"});
+
     if(comments.length > 0){
         var lastComment = getLastComment(comments);
-        var location = $("#issue_"+prNumber)[0];
+        var lastUserComment = getLastComment(comments, username);
         var src = $(lastComment).find(".timeline-comment-avatar")[0].src;
-        addIcon(location, src, lastComment, prNumber);
+        //addIcon(location, src, lastComment, prNumber);
+
+        if(typeof(lastUserComment) !== "undefined"){
+            setStyle(location, {"background-color": "#B0E57C"});
+        }
+    } else {
+        setStyle(location, {"background-color": "#FFAEAE"});
     }
-    //getLastComment(comments, username);
 }
 
 function addIcon(location, source, content, prNumber){
@@ -72,15 +80,27 @@ function addIcon(location, source, content, prNumber){
     $(temp).append(image);
 }
 
-function getLastComment(comments, username){
-    if(typeof(username) !== "undefined"){
+function getLastComment(comments, tempuser){
+    if(typeof(tempuser) !== "undefined"){
         // Username passed
+        var lastComment;
+        $.each(comments, function(i, comment){
+            if ($(comment).find("img")[0].alt.slice(1) == tempuser) {
+                lastComment = comment;
+            }
+        });
+
+        return lastComment;
     } else {
         // No username passed
         return comments[comments.length-1];
     }
 }
 
+function setStyle(location, style){
+    $(location).css(style);
+}
+
 function getNumLineComments(){
-    
+
 }
