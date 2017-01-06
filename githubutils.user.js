@@ -48,20 +48,28 @@ function getComments(source){
     var newComment = content.slice(-1,1);
     var comments = content.slice(1, content.length-1);
     var location = $('#issue_'+prNumber)[0];
+    var timelineComments = source.find('.js-discussion .timeline-comment-wrapper');
 
-    setStyle(location, {'background-color': '#FFEC94'});
+    redify(location);
 
-    if(comments.length > 0){
+    if (comments.length > 0) {
         var lastComment = getLastComment(comments);
         var lastUserComment = getLastComment(comments, username);
         //var src = $(lastComment).find('.timeline-comment-avatar')[0].src;
         //addIcon(location, src, lastComment, prNumber);
 
-        if(typeof(lastUserComment) !== 'undefined'){
-            setStyle(location, {'background-color': '#B0E57C'});
+        if (typeof(lastUserComment) !== 'undefined') {
+            greenify(location);
         }
     } else {
-        setStyle(location, {'background-color': '#FFAEAE'});
+        yellowify(location);
+    }
+
+    if (timelineComments.length > 0) {
+        var lastUserCodeComment = getLastComment(timelineComments, username);
+        if (typeof(lastUserCodeComment) !== 'undefined') {
+            greenify(location);
+        }
     }
 }
 
@@ -85,7 +93,6 @@ function getLastComment(comments, tempuser){
                 lastComment = comment;
             }
         });
-
         return lastComment;
     } else {
         // No username passed
@@ -97,6 +104,19 @@ function setStyle(location, style){
     $(location).css(style);
 }
 
+function redify(location) {
+    setStyle(location, {'background-color': '#FFEC94'});
+}
+
+function yellowify(location) {
+    setStyle(location, {'background-color': '#FFAEAE'});
+}
+
+function greenify(location) {
+    setStyle(location, {'background-color': '#B0E57C'});
+}
+
 function getNumLineComments(){
 
 }
+
