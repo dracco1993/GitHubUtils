@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Utils
 // @description  Something will go here...
-// @version      0.1.0
+// @version      0.2.0
 // @updateURL    https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @downloadURL  https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @author       @dracco1993
@@ -119,4 +119,3 @@ function greenify(location) {
 function getNumLineComments(){
 
 }
-
