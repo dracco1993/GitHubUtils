@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Utils
 // @description  Something will go here...
-// @version      0.3.0
+// @version      0.3.1
 // @updateURL    https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @downloadURL  https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @author       @dracco1993
@@ -19,12 +19,12 @@ var urlMatcher = /(?:\/.+?){2}\/pulls/;
     'use strict';
     init();
 
-    document.addEventListener("pjax:end", function() {
+    document.addEventListener('pjax:end', function() {
       if(Array.isArray(window.location.pathname.match(urlMatcher))){
         init();
       }
     });
-})();
+}());
 
 function init(){
     username = getUsername();
