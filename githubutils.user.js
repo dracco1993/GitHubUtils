@@ -21,10 +21,10 @@ var username;
 
 function init(){
     username = getUsername();
-    console.log(username);
-    $('.Box-body-row').each(function(k,v){
+    // console.log(username);
+    $('.Box-row').each(function(k,v){
         //console.log(v);
-        var temp = $(v).find('.Box-row-link')[0];
+        var temp = $(v).find('div.table-fixed > div > a')[0];
 
         $.ajax({
             url: temp.href,
