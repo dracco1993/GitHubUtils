@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Utils
 // @description  Something will go here...
-// @version      0.4.0
+// @version      0.4.1
 // @updateURL    https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @downloadURL  https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @author       @dracco1993
@@ -130,5 +130,18 @@ function yellowify(location) {
 function greenify(location) {
   setStyle(location, {
     'background-color': '#B0E57C'
+  });
+}
+
+function deleteHoundComments() {
+  $(".outdated-comment:contains('houndci-bot') form.js-comment-delete").each(function(){
+    var url = $(this).attr('action');
+    var data = $(this).serialize();
+    //console.log(url,data);
+    $.ajax({
+      url: url,
+      type: 'post',
+      data: data
+    });
   });
 }
