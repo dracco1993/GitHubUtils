@@ -133,6 +133,6 @@ function greenify(location) {
   });
 }
 
-function hideUserDeletedCommentDivs {
+function hideUserDeletedCommentDivs() {
   $('.discussion-item-comment_deleted').hide();
 }
