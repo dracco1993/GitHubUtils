@@ -49,6 +49,7 @@ function getUsername() {
 }
 
 function getComments(source) {
+    $('.discussion-item-comment_deleted').hide();
   var content = source.find('.js-comment-container');
   var prNumber = source.find('.gh-header-number').first().text().slice(1);
   var prDescription = content.slice(0, 1);
@@ -96,6 +97,7 @@ function addIcon(location, source, content, prNumber) {
 }
 
 function getLastComment(comments, tempuser) {
+    $('.discussion-item-comment_deleted').hide();
   if (typeof (tempuser) !== 'undefined') {
     // Username passed
     var lastComment;
