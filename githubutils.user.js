@@ -145,3 +145,7 @@ function deleteHoundComments() {
     });
   });
 }
+
+function hideUserDeletedCommentDivs() {
+  $('.discussion-item-comment_deleted').hide();
+}
