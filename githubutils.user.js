@@ -132,3 +132,7 @@ function greenify(location) {
     'background-color': '#B0E57C'
   });
 }
+
+function hideUserDeletedCommentDivs() {
+  $('.discussion-item-comment_deleted').hide();
+}
