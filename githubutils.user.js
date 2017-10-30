@@ -225,3 +225,7 @@ function addGlobalStyle(css) {
     style.innerHTML = css;
     head.appendChild(style);
 }
+
+function hideUserDeletedCommentDivs() {
+  $('.discussion-item-comment_deleted').hide();
+}
