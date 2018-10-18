@@ -92,7 +92,7 @@ function displayNextPage(source) {
 }
 
 function setNextPageURL(source) {
-  var nextPageButton = source.find(".pagination .next_page")
+  var nextPageButton = source.find(".pagination .next_page");
   if(nextPageButton.length > 0) {
     nextPageUrl = nextPageButton[0].href;
   }
@@ -207,7 +207,7 @@ function addNeverEndingStyles() {
     .ghu-green {
       background-color: #B0E57C !important;
     }
-  `
+  `;
   addGlobalStyle(neverEndingStyles);
 }
 
