@@ -11,6 +11,8 @@
 // @grant        none
 // ==/UserScript==
 
+/*jshint esversion: 6 */
+
 // global variables
 var username;
 var urlMatcher = /(?:\/.+?){2}\/pulls/;
@@ -192,7 +194,6 @@ function clearColors(location) {
 }
 
 function addNeverEndingStyles() {
-  /*jshint esversion: 6 */
   var neverEndingStyles = `
     .ghu-styled {
     }
