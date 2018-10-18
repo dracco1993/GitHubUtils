@@ -1,5 +1,3 @@
-esversion: 6
-
 ecmaFeatures:
   modules: true
   jsx: true
