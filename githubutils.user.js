@@ -45,7 +45,7 @@ function init() {
 }
 
 function getUsername() {
-  return $('.user-profile-link .css-truncate-target').text()
+  return $('.user-profile-link .css-truncate-target').text();
 }
 
 function getComments(source) {
