@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Utils
 // @description  Something will go here...
-// @version      0.5.0
+// @version      0.6.0
 // @updateURL    https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @downloadURL  https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @author       @dracco1993
@@ -11,9 +11,13 @@
 // @grant        none
 // ==/UserScript==
 
+/*jshint esversion: 6 */
+
 // global variables
 var username;
 var urlMatcher = /(?:\/.+?){2}\/pulls/;
+var isLoadingPages = false;
+var nextPageUrl;
 
 (function () {
   'use strict';
@@ -29,9 +33,17 @@ var urlMatcher = /(?:\/.+?){2}\/pulls/;
 }());
 
 function init() {
-  username = getUsername();
+  setupNeverEndingGithub();
+  setUsername();
+  colorizeMeCaptain();
+}
 
-  $('.Box-row').each(function (k, v) {
+function setUsername() {
+  username = $('.user-profile-link .css-truncate-target').text();
+}
+
+function colorizeMeCaptain() {
+  $('.Box-row:not(.ghu-styled)').each(function (k, v) {
     var temp = $(v).find('div.table-fixed > div > a')[0];
 
     $.ajax({
@@ -44,8 +56,48 @@ function init() {
   });
 }
 
-function getUsername() {
-  return $('.user-profile-link .css-truncate-target').text();
+function setupNeverEndingGithub() {
+  addNeverEndingStyles();
+  setNextPageURL($(document));
+
+  $(window).scroll(function() {
+    if($(window).scrollTop() + $(window).height() == $(document).height()) {
+      if(!isLoadingPages && nextPageUrl){
+        loadNextPage();
+      }
+    }
+  });
+}
+
+function loadNextPage() {
+  isLoadingPages = true;
+
+  $.ajax({
+    url: nextPageUrl,
+    success: function (result) {
+      var temp = $('<div/>').html(result).contents();
+      displayNextPage(temp);
+    },
+    always: function() {
+      isLoadingPages = false;
+    }
+  });
+}
+
+function displayNextPage(source) {
+  // Actually add the new loaded content into the current container
+  $(".issues-listing ul.js-navigation-container").append(source.find("[id^=issue_]"));
+  colorizeMeCaptain();
+
+  setNextPageURL(source);
+  isLoadingPages = false;
+}
+
+function setNextPageURL(source) {
+  var nextPageButton = source.find(".pagination .next_page");
+  if(nextPageButton.length > 0) {
+    nextPageUrl = nextPageButton[0].href;
+  }
 }
 
 function getComments(source) {
@@ -56,6 +108,8 @@ function getComments(source) {
   var comments = content.slice(1, content.length - 1);
   var location = $('#issue_' + prNumber)[0];
   var timelineComments = source.find('.js-discussion .timeline-comment-wrapper');
+
+  $(location).addClass("ghu-styled");
 
   redify(location);
 
@@ -113,25 +167,59 @@ function getLastComment(comments, tempuser) {
 }
 
 function setStyle(location, style) {
+  // Called with something like:
+  //  setStyle(location, {
+  //    'background-color': '#FFEC94'
+  //  });
   $(location).css(style);
 }
 
 function redify(location) {
-  setStyle(location, {
-    'background-color': '#FFEC94'
-  });
+  clearColors(location);
+  $(location).addClass("ghu-red");
 }
 
 function yellowify(location) {
-  setStyle(location, {
-    'background-color': '#FFAEAE'
-  });
+  clearColors(location);
+  $(location).addClass("ghu-yellow");
 }
 
 function greenify(location) {
-  setStyle(location, {
-    'background-color': '#B0E57C'
-  });
+  clearColors(location);
+  $(location).addClass("ghu-green");
+}
+
+function clearColors(location) {
+  $(location).removeClass("ghu-red ghu-yellow ghu-green");
+}
+
+function addNeverEndingStyles() {
+  var neverEndingStyles = `
+    .ghu-styled {
+    }
+
+    .ghu-red {
+      background-color: #FFEC94 !important;
+    }
+
+    .ghu-yellow {
+      background-color: #FFAEAE !important;
+    }
+
+    .ghu-green {
+      background-color: #B0E57C !important;
+    }
+  `;
+  addGlobalStyle(neverEndingStyles);
+}
+
+function addGlobalStyle(css) {
+  var head = document.getElementsByTagName('head')[0];
+  if (!head) { return; }
+  var style = document.createElement('style');
+  style.type = 'text/css';
+  style.innerHTML = css;
+  head.appendChild(style);
 }
 
 function hideUserDeletedCommentDivs() {
