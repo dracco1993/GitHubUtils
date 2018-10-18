@@ -45,7 +45,7 @@ function init() {
 }
 
 function getUsername() {
-  return $('.dropdown-header .css-truncate-target').text();
+  return $('.user-profile-link .css-truncate-target').text()
 }
 
 function getComments(source) {
@@ -100,7 +100,8 @@ function getLastComment(comments, tempuser) {
     // Username passed
     var lastComment;
     $.each(comments, function (i, comment) {
-      if ($(comment).find('img')[0].alt.slice(1) === tempuser) {
+      var image = $(comment).find('img');
+      if (image.length > 0 && $(comment).find('img')[0].alt.slice(1) === tempuser) {
         lastComment = comment;
       }
     });
