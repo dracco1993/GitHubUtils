@@ -192,6 +192,7 @@ function clearColors(location) {
 }
 
 function addNeverEndingStyles() {
+  /*jshint esversion: 6 */
   var neverEndingStyles = `
     .ghu-styled {
     }
