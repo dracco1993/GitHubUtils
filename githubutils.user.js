@@ -6,13 +6,18 @@
 // @downloadURL  https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @author       @dracco1993
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js
+// @require      http://userscripts-mirror.org/scripts/source/107941.user.js
 // @match        http://*.github.com/*
 // @match        https://*.github.com/*
-// @grant        none
+// @grant        GM_setValue
+// @grant        GM_getValue
 // ==/UserScript==
 
 // global variables
 var username;
+var settings = {
+  "hideHound": false
+};
 var urlMatcher = /(?:\/.+?){2}\/pulls/;
 
 (function () {
@@ -29,6 +34,8 @@ var urlMatcher = /(?:\/.+?){2}\/pulls/;
 }());
 
 function init() {
+  //defaultSettings();
+  //addSettingsButton();
   username = getUsername();
 
   $('.Box-row').each(function (k, v) {
@@ -132,6 +139,92 @@ function greenify(location) {
   setStyle(location, {
     'background-color': '#B0E57C'
   });
+}
+
+function deleteHoundComments() {
+  $(".outdated-comment:contains('houndci-bot') form.js-comment-delete").each(function(){
+    var url = $(this).attr('action');
+    var data = $(this).serialize();
+    //console.log(url,data);
+    $.ajax({
+      url: url,
+      type: 'post',
+      data: data
+    });
+  });
+}
+
+function defaultSettings(){
+    for (var key in settings){
+        console.log(key, settings[key]);
+    }
+    //GM_setValue("test", false);
+    //console.log(GM_getValue("test"));
+}
+
+function addSettingsButton() {
+  var $div;
+
+  // Add main gear
+  $div = $("<div>", {id: "plugin-settings", "class": "plugin-circle"});
+  $div.click(function(){
+    alert("test1");
+  });
+  $div.html('<svg aria-hidden="true" class="plugin-gear octicon octicon-gear" height="30" version="1.1" viewBox="0 0 14 16" width="30"><path fill-rule="evenodd" d="M14 8.77v-1.6l-1.94-.64-.45-1.09.88-1.84-1.13-1.13-1.81.91-1.09-.45-.69-1.92h-1.6l-.63 1.94-1.11.45-1.84-.88-1.13 1.13.91 1.81-.45 1.09L0 7.23v1.59l1.94.64.45 1.09-.88 1.84 1.13 1.13 1.81-.91 1.09.45.69 1.92h1.59l.63-1.94 1.11-.45 1.84.88 1.13-1.13-.92-1.81.47-1.09L14 8.75v.02zM7 11c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"></path></svg>');
+  $("body").append($div);
+
+  // Add hound delete
+  $div = $("<div>", {id: "hound-delete", "class": "plugin-circle"});
+  $div.click(function(){
+    alert("test2");
+  });
+  $div.html('<img src="https://github.com/houndci-bot.png?size=30" style="position: absolute;"><div id="crossbar"></div>');
+  $("body").append($div);
+
+  var settingStyles = `
+    #plugin-settings {
+      background-color: #24292e;
+      padding: 10px;
+    }
+
+    #hound-delete {
+      background-color: white;
+      //background-color: #A873D1;
+      border: 5px solid red;
+      bottom: 70px;
+      padding: 6px;
+    }
+
+    #crossbar {
+      margin: -3px;
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(135deg, transparent 46%, red 46%, red 54%, transparent 54%);
+    }
+
+    .plugin-circle {
+      width: 50px;
+      height: 50px;
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      border-radius: 100px;
+    }
+
+    .plugin-gear {
+      fill: rgba(255,255,255,0.75)
+    }
+  `;
+  addGlobalStyle(settingStyles);
+}
+
+function addGlobalStyle(css) {
+    var head = document.getElementsByTagName('head')[0];
+    if (!head) { return; }
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML = css;
+    head.appendChild(style);
 }
 
 function hideUserDeletedCommentDivs() {
