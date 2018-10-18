@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Utils
 // @description  Something will go here...
-// @version      0.4.0
+// @version      0.5.0
 // @updateURL    https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @downloadURL  https://github.com/dracco1993/GitHubUtils/raw/master/githubutils.user.js
 // @author       @dracco1993
@@ -45,7 +45,7 @@ function init() {
 }
 
 function getUsername() {
-  return $('.dropdown-header .css-truncate-target').text();
+  return $('.user-profile-link .css-truncate-target').text();
 }
 
 function getComments(source) {
@@ -100,7 +100,8 @@ function getLastComment(comments, tempuser) {
     // Username passed
     var lastComment;
     $.each(comments, function (i, comment) {
-      if ($(comment).find('img')[0].alt.slice(1) === tempuser) {
+      var image = $(comment).find('img');
+      if (image.length > 0 && $(comment).find('img')[0].alt.slice(1) === tempuser) {
         lastComment = comment;
       }
     });
