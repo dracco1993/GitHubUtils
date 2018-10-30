@@ -1,4 +1,4 @@
-# GitHubUtils
+## GitHubUtils
 
 [![Code Climate](https://codeclimate.com/github/dracco1993/GitHubUtils/badges/gpa.svg)](https://codeclimate.com/github/dracco1993/GitHubUtils)
 [![Issue Count](https://codeclimate.com/github/dracco1993/GitHubUtils/badges/issue_count.svg)](https://codeclimate.com/github/dracco1993/GitHubUtils)
