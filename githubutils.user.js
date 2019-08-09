@@ -15,7 +15,7 @@
 
 // global variables
 var username;
-var urlMatcher = /(?:\/.+?){2}\/pulls/;
+var urlMatcher = /\/pulls/;
 var isLoadingPages = false;
 var nextPageUrl;
 
@@ -44,13 +44,19 @@ function setUsername() {
 
 function colorizeMeCaptain() {
   $('.Box-row:not(.ghu-styled)').each(function (k, v) {
-    var temp = $(v).find('div.table-fixed > div > a')[0];
-
+    var links = $(v).find('div.table-fixed > div > a');
+    var temp, repo;
+    if (links[0].href.match(/\/pull/)) {
+      temp = links[0];
+    } else {
+        temp = links[1];
+        repo = links[0].text.replace(/\r?\n|\r/g, '').trim().split('/').join('_');
+    }
     $.ajax({
       url: temp.href,
       success: function (result) {
         var temp = $('<div/>').html(result).contents();
-        getComments(temp);
+        getComments(temp, repo);
       }
     });
   });
@@ -88,7 +94,6 @@ function displayNextPage(source) {
   // Actually add the new loaded content into the current container
   $(".issues-listing ul.js-navigation-container").append(source.find("[id^=issue_]"));
   colorizeMeCaptain();
-
   setNextPageURL(source);
   isLoadingPages = false;
 }
@@ -100,17 +105,19 @@ function setNextPageURL(source) {
   }
 }
 
-function getComments(source) {
+function getComments(source, repo) {
   var content = source.find('.js-comment-container');
   var prNumber = source.find('.gh-header-number').first().text().slice(1);
   var prDescription = content.slice(0, 1);
   var newComment = content.slice(-1, 1);
   var comments = content.slice(1, content.length - 1);
-  var location = $('#issue_' + prNumber)[0];
   var timelineComments = source.find('.js-discussion .timeline-comment-wrapper');
+  var location = $('#issue_' + prNumber)[0];
+  if (location == undefined) {
+    location = $('#issue_' + prNumber + '_' + repo);
+  }
 
   $(location).addClass("ghu-styled");
-
   redify(location);
 
   if (comments.length > 0) {
@@ -118,7 +125,6 @@ function getComments(source) {
     var lastUserComment = getLastComment(comments, username);
     //var src = $(lastComment).find('.timeline-comment-avatar')[0].src;
     //addIcon(location, src, lastComment, prNumber);
-
     if (typeof (lastUserComment) !== 'undefined') {
       greenify(location);
     }
@@ -225,3 +231,4 @@ function addGlobalStyle(css) {
 function hideUserDeletedCommentDivs() {
   $('.discussion-item-comment_deleted').hide();
 }
+
