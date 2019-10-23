@@ -100,8 +100,8 @@ function loadNextPage() {
 
 function displayNextPage(source) {
   // Actually add the new loaded content into the current container
-  $(".issues-listing ul.js-navigation-container").append(
-    source.find("[id^=issue_]")
+  $("div.js-navigation-container").append(
+    source.find("[id^=issue_]:not([id$=_link])")
   );
   colorizeMeCaptain();
   setNextPageURL(source);
