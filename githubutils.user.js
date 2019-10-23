@@ -73,7 +73,7 @@ function setupNeverEndingGithub() {
   setNextPageURL($(document));
 
   $(window).scroll(function() {
-    if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+    if ($(window).scrollTop() + $(window).height() === $(document).height()) {
       if (!isLoadingPages && nextPageUrl) {
         loadNextPage();
       }
@@ -129,7 +129,7 @@ function getComments(source, repo) {
     ".js-discussion .timeline-comment-wrapper"
   );
   var location = $("#issue_" + prNumber)[0];
-  if (location == undefined) {
+  if (location === undefined) {
     location = $("#issue_" + prNumber + "_" + repo);
   }
 
