@@ -19,18 +19,18 @@ var urlMatcher = /\/pulls/;
 var isLoadingPages = false;
 var nextPageUrl;
 
-(function () {
-  'use strict';
+(function() {
+  "use strict";
   if (Array.isArray(window.location.pathname.match(urlMatcher))) {
     init();
   }
 
-  document.addEventListener('pjax:end', function () {
+  document.addEventListener("pjax:end", function() {
     if (Array.isArray(window.location.pathname.match(urlMatcher))) {
       init();
     }
   });
-}());
+})();
 
 function init() {
   setupNeverEndingGithub();
@@ -39,23 +39,29 @@ function init() {
 }
 
 function setUsername() {
-  username = $('.user-profile-link .css-truncate-target').text();
+  username = $(".user-profile-link .css-truncate-target").text();
 }
 
 function colorizeMeCaptain() {
-  $('.Box-row:not(.ghu-styled)').each(function (k, v) {
-    var links = $(v).find('div.table-fixed > div > a');
+  $(".Box-row:not(.ghu-styled)").each(function(k, v) {
+    var links = $(v).find("div.table-fixed > div > a");
     var temp, repo;
     if (links[0].href.match(/\/pull/)) {
       temp = links[0];
     } else {
-        temp = links[1];
-        repo = links[0].text.replace(/\r?\n|\r/g, '').trim().split('/').join('_');
+      temp = links[1];
+      repo = links[0].text
+        .replace(/\r?\n|\r/g, "")
+        .trim()
+        .split("/")
+        .join("_");
     }
     $.ajax({
       url: temp.href,
-      success: function (result) {
-        var temp = $('<div/>').html(result).contents();
+      success: function(result) {
+        var temp = $("<div/>")
+          .html(result)
+          .contents();
         getComments(temp, repo);
       }
     });
@@ -67,8 +73,8 @@ function setupNeverEndingGithub() {
   setNextPageURL($(document));
 
   $(window).scroll(function() {
-    if($(window).scrollTop() + $(window).height() == $(document).height()) {
-      if(!isLoadingPages && nextPageUrl){
+    if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+      if (!isLoadingPages && nextPageUrl) {
         loadNextPage();
       }
     }
@@ -80,8 +86,10 @@ function loadNextPage() {
 
   $.ajax({
     url: nextPageUrl,
-    success: function (result) {
-      var temp = $('<div/>').html(result).contents();
+    success: function(result) {
+      var temp = $("<div/>")
+        .html(result)
+        .contents();
       displayNextPage(temp);
     },
     always: function() {
@@ -92,7 +100,9 @@ function loadNextPage() {
 
 function displayNextPage(source) {
   // Actually add the new loaded content into the current container
-  $(".issues-listing ul.js-navigation-container").append(source.find("[id^=issue_]"));
+  $(".issues-listing ul.js-navigation-container").append(
+    source.find("[id^=issue_]")
+  );
   colorizeMeCaptain();
   setNextPageURL(source);
   isLoadingPages = false;
@@ -100,21 +110,27 @@ function displayNextPage(source) {
 
 function setNextPageURL(source) {
   var nextPageButton = source.find(".pagination .next_page");
-  if(nextPageButton.length > 0) {
+  if (nextPageButton.length > 0) {
     nextPageUrl = nextPageButton[0].href;
   }
 }
 
 function getComments(source, repo) {
-  var content = source.find('.js-comment-container');
-  var prNumber = source.find('.gh-header-number').first().text().slice(1);
+  var content = source.find(".js-comment-container");
+  var prNumber = source
+    .find(".gh-header-number")
+    .first()
+    .text()
+    .slice(1);
   var prDescription = content.slice(0, 1);
   var newComment = content.slice(-1, 1);
   var comments = content.slice(1, content.length - 1);
-  var timelineComments = source.find('.js-discussion .timeline-comment-wrapper');
-  var location = $('#issue_' + prNumber)[0];
+  var timelineComments = source.find(
+    ".js-discussion .timeline-comment-wrapper"
+  );
+  var location = $("#issue_" + prNumber)[0];
   if (location == undefined) {
-    location = $('#issue_' + prNumber + '_' + repo);
+    location = $("#issue_" + prNumber + "_" + repo);
   }
 
   $(location).addClass("ghu-styled");
@@ -125,7 +141,7 @@ function getComments(source, repo) {
     var lastUserComment = getLastComment(comments, username);
     //var src = $(lastComment).find('.timeline-comment-avatar')[0].src;
     //addIcon(location, src, lastComment, prNumber);
-    if (typeof (lastUserComment) !== 'undefined') {
+    if (typeof lastUserComment !== "undefined") {
       greenify(location);
     }
   } else {
@@ -134,34 +150,41 @@ function getComments(source, repo) {
 
   if (timelineComments.length > 0) {
     var lastUserCodeComment = getLastComment(timelineComments, username);
-    if (typeof (lastUserCodeComment) !== 'undefined') {
+    if (typeof lastUserCodeComment !== "undefined") {
       greenify(location);
     }
   }
 }
 
 function addIcon(location, source, content, prNumber) {
-  var temp = $(location).find('.lh-condensed')[0];
+  var temp = $(location).find(".lh-condensed")[0];
   var href = $(content).find("a[href^='#issuecomment']")[0];
-  href = $(href).attr('href');
-  var url = window.location.href.replace(/(pulls.*)/g, '');
-  var link = $('<a>', {
-    href: url + 'pull/' + prNumber + href
+  href = $(href).attr("href");
+  var url = window.location.href.replace(/(pulls.*)/g, "");
+  var link = $("<a>", {
+    href: url + "pull/" + prNumber + href
   });
-  var image = link.append($('<img>', {
-    src: source,
-    width: 44
-  }));
+  var image = link.append(
+    $("<img>", {
+      src: source,
+      width: 44
+    })
+  );
   $(temp).append(image);
 }
 
 function getLastComment(comments, tempuser) {
-  if (typeof (tempuser) !== 'undefined') {
+  if (typeof tempuser !== "undefined") {
     // Username passed
     var lastComment;
-    $.each(comments, function (i, comment) {
-      var image = $(comment).find('img');
-      if (image.length > 0 && $(comment).find('img')[0].alt.slice(1) === tempuser) {
+    $.each(comments, function(i, comment) {
+      var image = $(comment).find("img");
+      if (
+        image.length > 0 &&
+        $(comment)
+          .find("img")[0]
+          .alt.slice(1) === tempuser
+      ) {
         lastComment = comment;
       }
     });
@@ -220,15 +243,16 @@ function addNeverEndingStyles() {
 }
 
 function addGlobalStyle(css) {
-  var head = document.getElementsByTagName('head')[0];
-  if (!head) { return; }
-  var style = document.createElement('style');
-  style.type = 'text/css';
+  var head = document.getElementsByTagName("head")[0];
+  if (!head) {
+    return;
+  }
+  var style = document.createElement("style");
+  style.type = "text/css";
   style.innerHTML = css;
   head.appendChild(style);
 }
 
 function hideUserDeletedCommentDivs() {
-  $('.discussion-item-comment_deleted').hide();
+  $(".discussion-item-comment_deleted").hide();
 }
-
