@@ -44,7 +44,7 @@ function setUsername() {
 
 function colorizeMeCaptain() {
   $(".Box-row:not(.ghu-styled)").each(function(k, v) {
-    var links = $(v).find("div.table-fixed > div > a");
+    var links = $(v).find("div.flex-auto > a");
     var temp, repo;
     if (links[0].href.match(/\/pull/)) {
       temp = links[0];
