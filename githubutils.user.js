@@ -11,7 +11,8 @@
 // @grant        none
 // ==/UserScript==
 
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
+/* eslint-env jquery   */
 
 // global variables
 var username;
