@@ -49,7 +49,7 @@ function setTheme() {
   var colorMode = $("html").data().colorMode;
   var systemIsDarkTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  isDarkMode = (colorMode == "dark") || (colorMode == "auto" && systemIsDarkTheme == true);
+  isDarkMode = (colorMode === "dark") || (colorMode === "auto" && systemIsDarkTheme === true);
 }
 
 function colorizeMeCaptain() {
