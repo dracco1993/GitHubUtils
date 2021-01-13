@@ -19,6 +19,7 @@ var username;
 var urlMatcher = /\/pulls/;
 var isLoadingPages = false;
 var nextPageUrl;
+var isDarkMode;
 
 (function() {
   "use strict";
@@ -34,6 +35,7 @@ var nextPageUrl;
 })();
 
 function init() {
+  setTheme();
   setupNeverEndingGithub();
   setUsername();
   colorizeMeCaptain();
@@ -41,6 +43,13 @@ function init() {
 
 function setUsername() {
   username = $(".user-profile-link .css-truncate-target").text();
+}
+
+function setTheme() {
+  var colorMode = $("html").data().colorMode;
+  var systemIsDarkTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  isDarkMode = (colorMode == "dark") || (colorMode == "auto" && systemIsDarkTheme == true);
 }
 
 function colorizeMeCaptain() {
@@ -155,6 +164,9 @@ function getComments(source, repo) {
       greenify(location);
     }
   }
+
+  // Set the theme
+  themify(location);
 }
 
 function addIcon(location, source, content, prNumber) {
@@ -219,8 +231,22 @@ function greenify(location) {
   $(location).addClass("ghu-green");
 }
 
+function themify(location) {
+  clearTheme(location);
+
+  if (isDarkMode) {
+    $(location).addClass("ghu-dark");
+  } else {
+    $(location).addClass("ghu-light");
+  }
+}
+
 function clearColors(location) {
   $(location).removeClass("ghu-red ghu-yellow ghu-green");
+}
+
+function clearTheme(location) {
+  $(location).removeClass("ghu-light ghu-dark");
 }
 
 function addNeverEndingStyles() {
@@ -228,16 +254,28 @@ function addNeverEndingStyles() {
     .ghu-styled {
     }
 
-    .ghu-red {
+    .ghu-red.ghu-light {
       background-color: #FFEC94 !important;
     }
 
-    .ghu-yellow {
+    .ghu-yellow.ghu-light {
       background-color: #FFAEAE !important;
+    }a
+
+    .ghu-green.ghu-light {
+      background-color: #B0E57C !important;
     }
 
-    .ghu-green {
-      background-color: #B0E57C !important;
+    .ghu-red.ghu-dark {
+      background-color: #570000 !important;
+    }
+
+    .ghu-yellow.ghu-dark {
+      background-color: #804a00 !important;
+    }
+
+    .ghu-green.ghu-dark {
+      background-color: #002900 !important;
     }
   `;
   addGlobalStyle(neverEndingStyles);
