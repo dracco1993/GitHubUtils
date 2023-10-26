@@ -33,7 +33,7 @@ body:
       label: Version
       description: What version of our software are you running?
       options:
-        - `naster` (Default)
+        - master (Default)
         - Other (Development)
       default: 0
     validations:
